@@ -1,0 +1,246 @@
+{
+    "success": "True",
+    "auth": {
+        "error": {
+            "invalid_credentials": "Invalid credentials",
+            "invalid_token": "Invalid token",
+            "user_Creation_failed": "Can't create account, please try again",
+            "invalid_email_type": "Unsupported email type",
+            "header_missing": "Authorization header is missing",
+            "missing_user_id": "Missing user id",
+            "invalid_user": "Invalid User Account",
+            "server_error": "Internal server error"
+        },
+        "success": {
+            "login": "Login successful",
+            "logout": "Logout successful",
+            "user_created": "Register successful",
+            "otp_sent": "Otp sent successfully",
+            "account_verified": "Account verified successfully",
+            "account_deleted": "Account deleted successfully",
+            "password_set": "Password set successfully",
+            "otp_verified": "OTP verified successfully"
+        },
+        "info": {
+            "logout": "You have been logged out"
+        },
+        "warning": {
+            "login": "You are already logged in"
+        },
+        "validation": {
+            "email": "Email must be a valid email address",
+            "name": "Name must contain at least 3 character(s)",
+            "organization_type": "Organization type must contain at least 3 character(s)",
+            "contact_person": "Contect person must contain at least 3 character(s)",
+            "password_min_length": "Password must be at least 6 character(s)",
+            "password_confirmation": "Password confirmation is required",
+            "password_mismatch": "Password mismatch",
+            "email_exists": "Email already exists",
+            "email_not_exists": "Email does not exist",
+            "password_incorrect": "Password is incorrect",
+            "token": "Token is required",
+            "token_invalid": "Token is invalid",
+            "token_expired": "Token is expired",
+            "role": "Role is required",
+            "role_invalid": "Role is invalid",
+            "role_not_exists": "Role does not exist",
+            "user_not_exists": "Invalid email address or account does not exist",
+            "user_not_active": "User is not active",
+            "user_not_found": "User not found",
+            "user_not_verified": "Account is not verified",
+            "password_not_set": "Password is not set",
+            "email_disposable": "Disposable email address is not allowed"
+        },
+        "otp": {
+            "error": {
+                "otp_not_exists": "OTP does not exist",
+                "otp_expired": "OTP is expired",
+                "otp_invalid": "OTP is invalid",
+                "otp_mismatch": "OTP mismatch",
+                "otp_not_verified": "OTP is not verified",
+                "otp_length": "OTP must be at least 6 character(s)"
+            },
+            "success": {
+                "otp_verified": "OTP verified successfully"
+            }
+        }
+    },
+    "profile": {
+        "user": {
+            "error": {
+                "update_failed": "Can't update profile, please try again",
+                "update_password_failed": "Can't update password, please try again",
+                "invalid_user": "You have landed on a wrong page"
+            },
+            "success": {
+                "update": "Profile updated successfully",
+                "update_password": "Password updated successfully",
+                "get_profile": "Profile fetched successfully"
+            },
+            "validation": {
+                "name": "Name must contain at least 3 character(s)",
+                "password_min_length": "Password must be at least 6 character(s)",
+                "password_confirmation": "Password confirmation is required",
+                "password_mismatch": "Invalid current password",
+                "invalid_input": "Invalid input or missing password"
+            },
+            "info": {
+                "update": "Profile updated successfully"
+            },
+            "warning": {
+                "update": "No changes made"
+            },
+            "bio": "A Nectar user, who loves musical beats, listening audio, creating journal and more..."
+        }
+    },
+    "health": {
+        "success": "Success Health Check, API Working Fine."
+    },
+    "db": {
+        "mongodb": {
+            "error": {
+                "connection": "MongoDB connection failure for service on port"
+            },
+            "success": {
+                "connection": "MongoDB connected successfully for service on port"
+            }
+        }
+    },
+    "server": {
+        "error": {
+            "port": "Port is required",
+            "port_invalid": "Port is invalid",
+            "port_in_use": "Port is already in use",
+            "port_not_exists": "Port does not exist",
+            "server_error": "Internal server error"
+        },
+        "success": {
+            "server": "Server is running on port"
+        }
+    },
+    "email": {
+        "error": {
+            "send": "Can't send email, please try again"
+        },
+        "success": {
+            "send": "Email sent successfully"
+        },
+        "info": {
+            "send": "Email sent successfully"
+        },
+        "warning": {
+            "send": "Email already sent"
+        },
+        "welcome": {
+            "subject": "Welcome to Hiron AI 🎉🎉"
+        }
+    },
+    "token": {
+        "error": {
+            "generate": "Can't generate token, please try again",
+            "expired": "Token is expired",
+            "missing": "Token is missing",
+            "invalid": "Token is invalid or something is wrong",
+            "missing_inputs": "Please provide userId and role to get token",
+            "not_found": "Token not found"
+        },
+        "success": {
+            "generate": "Token generated successfully",
+            "found": "Token found successfully"
+        }
+    },
+    "dashboard": {
+        "candidate": {
+            "success": {
+                "get_dashboard": "Dashboard Success",
+                "updated_dashboard": "Updated successfully",
+                "get_employee": "Employee Success"
+            },
+            "error": {
+                "invalid_role": "Invalid User Role",
+                "missing_inputs": "Please provide id to update dashboard",
+                "empty_update": "Inputs are empty"
+            }
+        },
+        "organization": {
+            "success": {
+                "get_dashboard": "Organization Dashboard",
+                "employees_uploaded": "Employees Uploaded Successfully",
+                "invites_resent": "Invites Resent Successfully",
+                "candidate_saved": "Candidate Saved Successfully",
+                "candidate_removed": "Candidate Remove Successfully",
+                "get_candidate": "Candidates Fetched Successfully",
+                "employee_removed": "Employee Removed Successfully"
+            },
+            "error": {
+                "invalid_employee_list": "Please provide a valid employees list.",
+                "invlid_canidate_id": "Please provide a valid employeeId",
+                "candidate_not_found": "Candidate Information Not Found",
+                "employee_not_found": "Employee not found.",
+                "employeeId_missing": "EmployeeId missing or invalid"
+            }
+        }
+    },
+    "search": {
+        "success": {
+            "search_success": "Search completed successfully"
+        },
+        "error": {
+            "ai_search_limit_exceeded": "AI search limit reached for today.",
+            "search_limit_exceeded": "Free search limit reached for today."
+        },
+        "info": {
+            "work_in_progress": "Work in progress"
+        }
+    },
+    "feedback": {
+        "error": {
+            "missing_input": "Please provide feedback inputs",
+            "invalid_feddback_type": "Invalid feedback type"
+        },
+        "success": {
+            "thanks": "Thank you for your feedback!"
+        }
+    },
+    "templates": {
+        "error": {
+            "missing_input": "Required inputs are missing or invalid",
+            "not_found": "Template not found",
+            "already_exists": "Template already exists"
+        },
+        "success": {
+            "get_templates": "Templates successfully loaded",
+            "created": "Templates created successfully",
+            "deleted": "Templates deleted successfully",
+            "updated": "Templates updated successfully"
+        }
+    },
+    "contact": {
+        "error": {
+            "missing_fields": "Inputs are missing or invalid"
+        },
+        "success": {
+            "message_sent": "Message sent successfully"
+        },
+        "validation": {
+            "name": "Name must contain at least 3 character(s)",
+            "email": "Email must be a valid email address",
+            "subject": "Subject must contain at least 5 character(s",
+            "message": "Message must contain at least 15 character(s)"
+        }
+    },
+    "newsletter": {
+        "error": {
+            "missing_fields": "Inputs are missing or invalid",
+            "already_subscribed": "You have already subscribed, stay tuned!!"
+        },
+        "success": {
+            "subscribed": "Newsletter subscribed successfully"
+        },
+        "validation": {
+            "name": "Name must contain at least 3 character(s)",
+            "email": "Email must be a valid email address",
+            "feature": "Feature must contain at least 3 character(s"
+        }
+    }
+}
