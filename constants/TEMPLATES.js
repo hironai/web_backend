@@ -23,12 +23,20 @@ const Templates = [
         "popular": false,
         "previewUrl": "minimalist"
     },
+    // {
+    //     "name": "Executive Summary",
+    //     "description": "A premium template for executives and senior professionals",
+    //     "category": "Executive",
+    //     "premium": true,
+    //     "price": "$4.99",
+    //     "popular": false,
+    //     "previewUrl": "executive-summary"
+    // },
     {
         "name": "Executive Summary",
         "description": "A premium template for executives and senior professionals",
         "category": "Executive",
-        "premium": true,
-        "price": "$4.99",
+        "premium": false,
         "popular": false,
         "previewUrl": "executive-summary"
     },
@@ -44,8 +52,7 @@ const Templates = [
         "name": "Academic CV",
         "description": "A comprehensive template for academic professionals",
         "category": "Academic",
-        "premium": true,
-        "price": "$3.99",
+        "premium": false,
         "popular": false,
         "previewUrl": "academic-cv"
     },
@@ -61,8 +68,7 @@ const Templates = [
         "name": "Creative Designer",
         "description": "A visually appealing template for creative professionals",
         "category": "Creative",
-        "premium": true,
-        "price":"$5.99",
+        "premium": false,
         "popular": false,
         "previewUrl": "creative-designer"
     }

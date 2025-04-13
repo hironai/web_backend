@@ -7,8 +7,10 @@ const transporter = nodemailer.createTransport({
     secureConnection: true,
     port: process.env.SMPT_PORT,
     auth: {
-        user: process.env.SMPT_USER,
-        pass: process.env.SMPT_PASSWORD,
+        user: "auth@hironai.com",
+        pass: "#Verify@Key$1122",
+        // user: process.env.SMPT_USER,
+        // pass: process.env.SMPT_PASSWORD,
     },
 });
 

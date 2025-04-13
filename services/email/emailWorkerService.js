@@ -28,7 +28,8 @@ const processEmailJob = catchAsyncErrors(async ({ type, email, emailBody, emailT
 
     // Send the email
     await transporter.sendMail({
-        from: process.env.SMTP_USER,
+        // from: process.env.SMTP_USER,
+        from: '"Hiron AI Auth" <auth@hironai.com>',
         to: email,
         subject: emailTitle,
         html: emailBody,
