@@ -8,8 +8,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Environment variables
-.env
+# # Environment variables
+# .env
 
 # Build output
 dist/

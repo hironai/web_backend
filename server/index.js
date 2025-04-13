@@ -1,5 +1,8 @@
 // Load environment variables from the .env file located in the config folder
-require('dotenv').config({ path: './config/.env' });
+// require('dotenv').config({ path: './config/.env' });
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../config/.env') });
+
 // Add email workers to send emails
 require('../services/queue/emailWorker');
 
