@@ -11,7 +11,8 @@ const errorHandler = require("./utils/error/errorhandler");
 // Enable Cross-Origin Resource Sharing (CORS)
 app.use(
     cors({
-        origin: "http://localhost:3000", // ✅ Explicitly allow frontend URL
+        // origin: "http://localhost:3000", // ✅ Explicitly allow frontend URL
+        origin: "https://hironai.com",
         credentials: true, // ✅ Allow cookies and credentials
         methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
         allowedHeaders: "Content-Type,Authorization",
