@@ -12,7 +12,7 @@ const errorHandler = require("./utils/error/errorhandler");
 app.use(
     cors({
         // origin: "http://localhost:3000", // ✅ Explicitly allow frontend URL
-        origin: "https://internal.hironai.com",
+        origin: "https://internal.hironai.com", 
         credentials: true, // ✅ Allow cookies and credentials
         methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
         allowedHeaders: "Content-Type,Authorization",
