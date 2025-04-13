@@ -1,7 +1,7 @@
 # Backend Project
 
 ## Overview
-This project is the backend service for the Nactar application. It provides APIs for user management, authentication, and data processing.
+This project is the backend service for the Hiron AI application. It provides APIs for user management, authentication, and data processing.
 
 ## Features
 - User authentication and authorization
@@ -13,12 +13,13 @@ This project is the backend service for the Nactar application. It provides APIs
 - Node.js >= 14.x
 - npm >= 6.x
 - MongoDB >= 4.x
+- Redis ? 
 
 ## Installation
 1. Clone the repository:
     ```sh
-    git clone https://github.com/yourusername/nactar-backend.git
-    cd nactar-backend
+    git clone https://github.com/yourusername/web_backend.git
+    cd web_backend
     ```
 
 2. Install dependencies:
@@ -30,7 +31,7 @@ This project is the backend service for the Nactar application. It provides APIs
     Create a `.env` file in the root directory and add the following variables:
     ```env
     PORT=3000
-    MONGODB_URI=mongodb://localhost:27017/nactar
+    MONGODB_URI=mongodb://localhost:27017/hironai
     JWT_SECRET=your_jwt_secret
     ```
 

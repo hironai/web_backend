@@ -11,8 +11,8 @@ const notificationSchema = new mongoose.Schema({
 
 
 const candidateSchema = new mongoose.Schema({
-    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true, index: true },
-    isSearchEnable: { type: Boolean, default: true , index: true },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    isSearchEnable: { type: Boolean, default: true  },
     name: { type: String, default: "" },
     email: { type: String, default: ""},
 
@@ -131,8 +131,8 @@ const candidateSchema = new mongoose.Schema({
             {
                 addressLine1: { type: String, default: "" },
                 addressLine2: { type: String, default: "" },
-                city: { type: String, default: "", index: true },
-                state: { type: String, default: "", index: true },
+                city: { type: String, default: "" },
+                state: { type: String, default: "" },
                 postalCode: { type: String, default: "" },
                 country: { type: String, default: "" },
                 isPublic: { type: Boolean, default: false },
