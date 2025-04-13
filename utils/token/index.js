@@ -136,7 +136,6 @@ const validateToken = catchAsyncErrors(async (req, res, next) => {
 
 
 const tokenGenerater = async (id, role, res, generateBoth = true) => {
-    console.log(res, id, role);
     
     // Generate access token
     const accessToken = generateToken(id, role, "accessToken", process.env.JWT_ACCESS_EXPIRES_IN);

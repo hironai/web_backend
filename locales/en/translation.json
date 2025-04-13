@@ -139,7 +139,7 @@
         "error": {
             "generate": "Can't generate token, please try again",
             "expired": "Token is expired",
-            "missing": "Token is missing",
+            "missing": "Session expired, please login again",
             "invalid": "Token is invalid or something is wrong",
             "missing_inputs": "Please provide userId and role to get token",
             "not_found": "Token not found"
