@@ -8,7 +8,7 @@ function generateOTP() {
 }
 
 // Generates and Send OTP to email queue service
-exports.otpSender = catchAsyncErrors(async (email, username) => {
+exports.otpSender = catchAsyncErrors(async (email, username, next) => {
     
     // Generate the OTP
     let otp = generateOTP();

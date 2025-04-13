@@ -74,7 +74,7 @@ const sendOTP = catchAsyncErrors(async (req, res, next) => {
 
     // call otpSender to send otp
     let username = user.name;
-    await otpSender(email, username);
+    await otpSender(email, username, next);
 
     return res.status(STATUS.SUCCESS).json({
         success: true,
