@@ -60,3 +60,6 @@ const validateRequest = (req, res, next) => {
             .json({ success: false, error: req.t("Forbidden: Access Not Allowed") });
     }
 };
+
+
+module.exports = validateRequest;
