@@ -43,6 +43,7 @@ const validateRequest = (req, res, next) => {
 
     console.log("Allowed Origins:", allowedOrigins);
     console.log("Request Origin:", requestOrigin);
+    console.log("Request Headers:", req.headers);
 
 
     if (allowedOrigins.includes(requestOrigin)) {
