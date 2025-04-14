@@ -1,11 +1,11 @@
-exports.WelcomeUser = (name) => {
+exports.InvitationEmail = (organization, name, inviter_name, email, temporary_password) => {
     let year = new Date().getFullYear();
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Hiron AI</title>
+    <title>Join Your Team on Hiron AI</title>
     <!--[if mso]>
     <noscript>
         <xml>
@@ -28,6 +28,20 @@ exports.WelcomeUser = (name) => {
             width: 100%;
             max-width: 600px;
             margin: 0 auto;
+        }
+        /* Credentials box */
+        .credentials-box {
+            background-color: #f8f9fa;
+            padding: 24px;
+            border-radius: 6px;
+            margin: 24px 0;
+        }
+        .credentials-item {
+            margin: 12px 0;
+            padding: 12px;
+            background-color: #ffffff;
+            border-radius: 4px;
+            border: 1px solid #e5e7eb;
         }
         /* Button styles */
         .button {
@@ -58,6 +72,13 @@ exports.WelcomeUser = (name) => {
             .dark-mode-border {
                 border-color: #333333 !important;
             }
+            .credentials-box {
+                background-color: #333333 !important;
+            }
+            .credentials-item {
+                background-color: #1a1a1a !important;
+                border-color: #333333 !important;
+            }
         } */
         /* Mobile responsiveness */
         @media screen and (max-width: 600px) {
@@ -66,6 +87,10 @@ exports.WelcomeUser = (name) => {
             }
             .mobile-padding {
                 padding: 20px !important;
+            }
+            .button {
+                width: 100%;
+                box-sizing: border-box;
             }
         }
     </style>
@@ -86,32 +111,41 @@ exports.WelcomeUser = (name) => {
                                 </tr>
                             </table>
 
-                            <!-- Welcome Message -->
+                            <!-- Title -->
                             <h1 style="color: #333333; font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 24px;" class="dark-mode-text">
-                                Welcome to Hiron AI!
+                                You're Invited to Join ${organization} on Hiron AI
                             </h1>
 
                             <!-- Main Content -->
-                            <p style="color: #666666; font-size: 16px; margin-bottom: 24px;" class="dark-mode-text">
+                            <p style="color: #666666; font-size: 16px; margin-bottom: 24px; text-align: center;" class="dark-mode-text">
                                 Hi ${name},
                             </p>
 
-                            <p style="color: #666666; font-size: 16px; margin-bottom: 24px;" class="dark-mode-text">
-                                We're thrilled to have you join our community! Your account has been successfully created, and you're now ready to explore all the amazing features our platform has to offer.
+                            <p style="color: #666666; font-size: 16px; margin-bottom: 24px; text-align: center;" class="dark-mode-text">
+                                ${inviter_name} has invited you to join their team on Hiron AI. We've created an account for you with the following credentials:
                             </p>
 
-                            <!-- Getting Started Section -->
+                            <!-- Credentials -->
+                            <div class="credentials-box">
+                                <div class="credentials-item">
+                                    <p style="color: #666666; font-size: 14px; margin: 0;" class="dark-mode-text">
+                                        <strong>Email:</strong> ${email}
+                                    </p>
+                                </div>
+                                <div class="credentials-item">
+                                    <p style="color: #666666; font-size: 14px; margin: 0;" class="dark-mode-text">
+                                        <strong>Temporary Password:</strong> ${temporary_password}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Security Notice -->
                             <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation" style="margin: 32px 0;">
                                 <tr>
                                     <td style="background-color: #f8f9fa; padding: 24px; border-radius: 6px;" class="dark-mode">
-                                        <h2 style="color: #333333; font-size: 18px; margin-bottom: 16px;" class="dark-mode-text">
-                                            🚀 Get Started in 3 Easy Steps
-                                        </h2>
-                                        <ol style="color: #666666; margin-left: 24px; padding: 0;" class="dark-mode-text">
-                                            <li style="margin-bottom: 12px;">Complete your profile</li>
-                                            <li style="margin-bottom: 12px;">Explore available opportunities</li>
-                                            <li style="margin-bottom: 12px;">Connect with potential matches</li>
-                                        </ol>
+                                        <p style="color: #666666; font-size: 14px; margin: 0;" class="dark-mode-text">
+                                            🔒 For security reasons, you'll be required to change your password on your first login. This invitation expires in 48 hours.
+                                        </p>
                                     </td>
                                 </tr>
                             </table>
@@ -120,16 +154,16 @@ exports.WelcomeUser = (name) => {
                             <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
                                 <tr>
                                     <td align="center">
-                                        <a href="https://hironai.com/dashboard" class="button" style="font-family: inherit;">
-                                            Complete Your Profile
+                                        <a href="https://hironai.com/login" class="button" style="font-family: inherit;">
+                                            Get Started
                                         </a>
                                     </td>
                                 </tr>
                             </table>
 
-                            <!-- Help Section -->
-                            <p style="color: #666666; font-size: 16px; margin-top: 32px;" class="dark-mode-text">
-                                Need help getting started? Our support team is here for you 24/7. Just reply to this email or visit our <a href="https://hironai.com/help-center" style="color: #074b34; text-decoration: none;">Help Center</a>.
+                            <!-- Help Text -->
+                            <p style="color: #666666; font-size: 16px; text-align: center;" class="dark-mode-text">
+                                Need help? <a href="https://hironai.com/help-center" style="color: #074b34; text-decoration: none;">Contact Support</a>
                             </p>
 
                             <!-- Footer -->
@@ -143,7 +177,6 @@ exports.WelcomeUser = (name) => {
                                             Buckingham Palace Road, London SW1W 9SR, UK
                                         </p>
                                         <p style="color: #999999; font-size: 14px; text-align: center; margin-top: 16px;" class="dark-mode-text">
-                                            <a href="https://hironai.com/dashboard" style="color: #999999; text-decoration: underline; margin: 0 8px;">Unsubscribe</a>
                                             <a href="https://hironai.com/privacy" style="color: #999999; text-decoration: underline; margin: 0 8px;">Privacy Policy</a>
                                             <a href="https://hironai.com/terms" style="color: #999999; text-decoration: underline; margin: 0 8px;">Terms of Service</a>
                                         </p>

@@ -1,5 +1,6 @@
 const catchAsyncErrors = require("../../middlewares/catchAsyncErrors");
 const User = require("../../models/auth/user");
+const { ReInvitationEmail } = require("../../templates/emails/ReInvite");
 const { addEmailsToQueue } = require("../email/emailQueueService");
 
 // ============================== RESEND INVITE SERVICE CONTROLLER START =====================
@@ -46,11 +47,17 @@ exports.resendInviteService = catchAsyncErrors(async (req, res, next) => {
         }
 
         // 🔍 Step 4: Prepare Emails for Users in This Batch
+        // const emails = existingUsers.map(emp => ({
+        //     name: emp.name,
+        //     email: emp.email,
+        //     emailTitle: `Hey ${emp.name} 👋, ${OrganisationInfo.name} invited you to join Hiron AI.`,
+        //     emailBody: `Hey ${emp.name} 👋, ${OrganisationInfo.name} invited you to join Hiron AI.`,
+        // }));
         const emails = existingUsers.map(emp => ({
             name: emp.name,
             email: emp.email,
-            emailTitle: `Hey ${emp.name} 👋, ${OrganisationInfo.name} invited you to join Hiron AI.`,
-            emailBody: `Hey ${emp.name} 👋, ${OrganisationInfo.name} invited you to join Hiron AI.`,
+            emailTitle: `Reminder: Join Your ${OrganisationInfo.name} Team on Hiron AI`,
+            emailBody: ReInvitationEmail(emp.name, OrganisationInfo.contactPerson, OrganisationInfo.name, emp.email),
         }));
 
         // 🔍 Step 5: Send Emails in Bulk

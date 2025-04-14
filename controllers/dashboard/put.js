@@ -30,7 +30,7 @@ const updateDashboard = catchAsyncErrors(async (req, res, next) => {
         );
     }
 
-    if (role === "Candidate") {
+    if (role === "Candidate" || role === "Admin") {
         dashboard = await updateCandidateDashboard(req, res, next);
         dashboard['stats'] = await getCandidateStats(dashboard);
         // dashboard.updatedAt = getLastActiveStatus(dashboard.updatedAt);

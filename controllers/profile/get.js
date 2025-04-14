@@ -2,6 +2,7 @@ const STATUS = require("../../constants/STATUS");
 const catchAsyncErrors = require("../../middlewares/catchAsyncErrors");
 const User = require("../../models/auth/user");
 const Candidate = require("../../models/dashboard/candidate");
+const { getCandidateStats } = require("../../services/candidates");
 const throwError = require("../../utils/error/error");
 
 
@@ -19,7 +20,12 @@ const userProfile = catchAsyncErrors(async (req, res, next) => {
     let profile = await Candidate.findOne({ user: user._id }).populate({
         path: 'user',
         select: 'name email userName role'
-    });
+    }).lean(); 
+
+    const profileSections = await getCandidateStats(profile);
+    const completedSections = profileSections.filter(section => section.completed).length;
+
+    profile['isPorfileCompleted'] = completedSections === profileSections.length;
 
     // send new auth token
     return res.status(STATUS.SUCCESS).json({

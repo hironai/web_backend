@@ -18,7 +18,7 @@ const getDashboardById = catchAsyncErrors(async (req, res, next) => {
     let { userId, role } = req.user
     let dashboard;
 
-    if (role === "Candidate") {
+    if (role === "Candidate" || role === "Admin") {
         dashboard = await Candidate.findOne({ user: userId }).populate({
             path: 'user',
             select: 'name email userName role'
@@ -47,12 +47,15 @@ const getDashboardById = catchAsyncErrors(async (req, res, next) => {
         dashboard['stats'] = await getCandidateStats(dashboard);
     }
     else if (role === "Organization") {
+        
         dashboard = await Organization.findOne({ user: userId }).populate({
             path: 'user',
             select: 'name email userName role contactPerson organizationType'
         }).lean();
 
         dashboard['stats'] = await getOrganizationStats(userId);
+        
+        
         // dashboard['employees'] = await getOrganizationEmployees(userId);
         dashboard['quickactions'] = QUICKACTIONS;
 

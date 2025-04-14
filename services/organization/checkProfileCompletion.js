@@ -44,15 +44,26 @@ exports.getLastActiveStatus = (lastActiveDate) => {
 };
 
 exports.countRefers = async (userId) => {
+    let user = await User.findById(userId).select("referId").lean();
+
+    if (!user || !user.referId) {
+        return {
+            totalRefers: 0,
+            totalActiveRefers: 0,
+            latestActiveRefers: []
+        };
+    }
+    
+    let referBY = user.referId;
 
     // 🔍 Count total referred users
-    const totalRefers = await User.countDocuments({ referBY: userId });
+    const totalRefers = await User.countDocuments({ referBY });
 
     // 🔍 Count total active referred users (those who have `isWelcomeSent: true`)
-    const totalActiveRefers = await User.countDocuments({ referBY: userId, isWelcomeSent: true });
+    const totalActiveRefers = await User.countDocuments({ referBY, isWelcomeSent: true });
 
     // 🔍 Fetch latest 5 active referred users (sorted by `createdAt`)
-    const latestActiveRefers = await User.find({ referBY: userId, isWelcomeSent: true })
+    const latestActiveRefers = await User.find({ referBY, isWelcomeSent: true })
         .sort({ createdAt: -1 }) // Latest first
         .limit(10) // Get 10 latest active referred users
         .select("name email createdAt") // Select required fields only
@@ -112,12 +123,15 @@ exports.getOrganizationStats = async (organizationId) => {
             "organizations.isAccepted": true
         }).select("_id");
 
+
         // Get user IDs of active employees
         const activeUserIds = activeUsers.map(user => user._id);
 
+ 
         // 🔍 Fetch Candidate profiles to determine profile completion
         const candidates = await Candidate.find({ user: { $in: activeUserIds } }).select("user personalDetails professionalDetails experience education");
 
+     
         let completedProfiles = 0;
         let incompleteProfiles = 0;
 

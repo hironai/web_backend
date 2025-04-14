@@ -400,50 +400,176 @@ exports.searchOrganizationEmployees = catchAsyncErrors(async (req, res, next) =>
 // });
 
 
+// exports.SearchService = catchAsyncErrors(async (items) => {
+//     let { filterConditions, page, limit, searchConditions, userId } = items;
+//     const skip = (page - 1) * limit;
+    
+//     let results = [];
+
+//     // 🔍 Address Filter (match any address field using a keyword)
+//     if (filterConditions.address) {
+//         const keyword = filterConditions.address;
+//         filterConditions.address = {
+//             $elemMatch: {
+//                 $or: [
+//                     { state: new RegExp(keyword, "i") },
+//                     { city: new RegExp(keyword, "i") },
+//                     { addressLine1: new RegExp(keyword, "i") },
+//                     { addressLine2: new RegExp(keyword, "i") },
+//                     { postalCode: new RegExp(keyword, "i") },
+//                     { country: new RegExp(keyword, "i") }
+//                 ]
+//             }
+//         };
+//     }
+
+//     // 💼 Experience Filter (candidates with >= X years)
+//     if (filterConditions["professionalDetails.yearsOfExperience"] !== undefined) {
+//         const minExperience = filterConditions["professionalDetails.yearsOfExperience"];
+//         filterConditions.professionalDetails = {
+//             $elemMatch: { yearsOfExperience: { $gte: minExperience } }
+//         };
+//     }
+
+//     // 🔎 Text Search (name or email)
+//     if (searchConditions?.$text?.$search) {
+//         const keyword = searchConditions.$text.$search;
+//         delete searchConditions.$text;
+
+//         const regex = new RegExp(keyword, "i");
+//         searchConditions.$or = [
+//             { name: regex },
+//             { email: regex }
+//         ];
+//     }
+    
+
+//     // 🔍 Step 1: Strict Search
+//     results = await Candidate.find({ ...searchConditions, ...filterConditions })
+//         .select({ score: { $meta: "textScore" }, user: 1, address: 1, professionalDetails: 1 })
+//         .sort({ score: { $meta: "textScore" } })
+//         .skip(skip)
+//         .limit(limit)
+//         .populate({
+//             path: "user",
+//             select: "name email organizations _id lastActive",
+//             populate: {
+//                 path: "organizations.organizationId",
+//                 model: "User",
+//                 select: "name organizationType _id"
+//             }
+//         });        
+        
+//     // 🔄 Step 2: Flexible Search if No Results
+//     if (results.length === 0) {
+//         const softFilter = { ...filterConditions };
+
+//         // Try removing filters one-by-one for fallback
+//         if (softFilter?.education?.degree) {
+//             delete softFilter.education.degree;
+//         } else if (softFilter.address) {
+//             delete softFilter.address;
+//         } else if (softFilter.professionalDetails) {
+//             delete softFilter.professionalDetails;
+//         }
+
+//         results = await Candidate.find({ ...searchConditions, ...softFilter })
+//             .select({ score: { $meta: "textScore" }, user: 1, address: 1, professionalDetails: 1, research: 1, publications: 1 })
+//             .sort({ score: { $meta: "textScore" } })
+//             .skip(skip)
+//             .limit(limit)
+//             .populate({
+//                 path: "user",
+//                 select: "name email userName organizations _id lastActive",
+//                 populate: {
+//                     path: "organizations.organizationId",
+//                     model: "User",
+//                     select: "name organizationType _id"
+//                 }
+//             });
+//     }
+
+//     // ✅ Find candidates already saved by the organization
+//     const candidateIds = results.map(c => c.user._id);
+//     const savedCandidates = await shortlisted.find({
+//         user: userId,
+//         candidate: { $in: candidateIds }
+//     }).select("candidate").lean();
+
+//     const savedCandidateSet = new Set(savedCandidates.map(sc => sc.candidate.toString()));
+
+//     // 🔢 Score Normalization
+//     const maxScore = results.length > 0 ? Math.max(...results.map(r => r._doc?.score || 1)) : 1;
+
+//     // 🧾 Format Results
+//     const formattedResults = results.map(candidate => ({
+//         id: candidate.user._id,
+//         name: candidate?.user?.name || "Hiron AI User",
+//         jobtitle: candidate.professionalDetails?.[0]?.currentTitle || "Hiron AI User",
+//         location: candidate.address?.[0]
+//             ? `${candidate.address[0]?.city || "Unknown"}, ${candidate.address[0]?.state || "Unknown"}`
+//             : "Unknown, Unknown",
+//         experience: candidate.professionalDetails?.[0]?.yearsOfExperience
+//             ? `${candidate.professionalDetails[0].yearsOfExperience} years`
+//             : "N/A",
+//         skills: candidate.professionalDetails?.[0]?.skills || [],
+//         education: candidate.education?.[0]
+//             ? `${candidate.education[0].degree}, ${candidate.education[0].institution}`
+//             : "N/A",
+//         organizations: candidate?.user?.organizations?.map(org => ({
+//             id: org.organizationId?._id || "N/A",
+//             name: org.organizationId?.name || "N/A",
+//             type: org.organizationId?.organizationType || "N/A"
+//         })) || [],
+//         lastActive: candidate.user?.lastActive
+//             ? getLastActiveStatus(candidate.user.lastActive)
+//             : getLastActiveStatus(new Date()),
+//         match: candidate._doc?.score
+//             ? Math.round((candidate._doc.score / maxScore) * 100)
+//             : 0,
+//         isSaved: savedCandidateSet.has(candidate.user._id.toString())
+//     }));
+
+//     return formattedResults;
+// });
+
+
+
+// ============================== SEARCH CANDIDATES SERVICE END =============================
+
+
 exports.SearchService = catchAsyncErrors(async (items) => {
     let { filterConditions, page, limit, searchConditions, userId } = items;
     const skip = (page - 1) * limit;
 
     let results = [];
 
-    // 🔍 Address Filter (match any address field using a keyword)
-    if (filterConditions.address) {
-        const keyword = filterConditions.address;
-        filterConditions.address = {
+    // ✅ Efficient Address Filtering
+    if (filterConditions["address"]) {
+        filterConditions["address"] = {
             $elemMatch: {
                 $or: [
-                    { state: new RegExp(keyword, "i") },
-                    { city: new RegExp(keyword, "i") },
-                    { addressLine1: new RegExp(keyword, "i") },
-                    { addressLine2: new RegExp(keyword, "i") },
-                    { postalCode: new RegExp(keyword, "i") },
-                    { country: new RegExp(keyword, "i") }
+                    { state: new RegExp(filterConditions["address"], "i") },
+                    { city: new RegExp(filterConditions["address"], "i") },
+                    { addressLine1: new RegExp(filterConditions["address"], "i") },
+                    { addressLine2: new RegExp(filterConditions["address"], "i") },
+                    { postalCode: new RegExp(filterConditions["address"], "i") },
+                    { country: new RegExp(filterConditions["address"], "i") }
                 ]
             }
         };
+        delete filterConditions["address"];
     }
 
-    // 💼 Experience Filter (candidates with >= X years)
-    if (filterConditions["professionalDetails.yearsOfExperience"] !== undefined) {
-        const minExperience = filterConditions["professionalDetails.yearsOfExperience"];
-        filterConditions.professionalDetails = {
-            $elemMatch: { yearsOfExperience: { $gte: minExperience } }
+    // ✅ Experience Filtering (Candidates with Experience >= Given Value)
+    if (filterConditions["professionalDetails.yearsOfExperience"]) {
+        filterConditions["professionalDetails"] = {
+            $elemMatch: { yearsOfExperience: { $gte: filterConditions["professionalDetails.yearsOfExperience"] } }
         };
+        delete filterConditions["professionalDetails.yearsOfExperience"];
     }
 
-    // 🔎 Text Search (name or email)
-    if (searchConditions?.$text?.$search) {
-        const keyword = searchConditions.$text.$search;
-        delete searchConditions.$text;
-
-        const regex = new RegExp(keyword, "i");
-        searchConditions.$or = [
-            { name: regex },
-            { email: regex }
-        ];
-    }
-
-    // 🔍 Step 1: Strict Search
+    // 🔍 Step 1: Strict Search (All Filters Applied)
     results = await Candidate.find({ ...searchConditions, ...filterConditions })
         .select({ score: { $meta: "textScore" }, user: 1, address: 1, professionalDetails: 1 })
         .sort({ score: { $meta: "textScore" } })
@@ -457,62 +583,64 @@ exports.SearchService = catchAsyncErrors(async (items) => {
                 model: "User",
                 select: "name organizationType _id"
             }
-        });        
+        });
 
-    // 🔄 Step 2: Flexible Search if No Results
+    // 🔄 Step 2-5: Flexible Search (Remove Filters If No Results)
     if (results.length === 0) {
-        const softFilter = { ...filterConditions };
-
-        // Try removing filters one-by-one for fallback
-        if (softFilter?.education?.degree) {
-            delete softFilter.education.degree;
-        } else if (softFilter.address) {
-            delete softFilter.address;
-        } else if (softFilter.professionalDetails) {
-            delete softFilter.professionalDetails;
+        if (filterConditions["education.degree"]) {
+            delete filterConditions["education.degree"];
+        } else if (filterConditions["address"]) {
+            delete filterConditions["address"];
+        } else if (filterConditions["professionalDetails"]) {
+            delete filterConditions["professionalDetails"];
+        } else {
+            results = await Candidate.find(searchConditions)
+                .select({ score: { $meta: "textScore" }, user: 1, address: 1, professionalDetails: 1 })
+                .sort({ score: { $meta: "textScore" } })
+                .skip(skip)
+                .limit(limit)
+                .populate({
+                    path: "user",
+                    select: "name email userName organizations _id lastActive",
+                    populate: {
+                        path: "organizations.organizationId",
+                        model: "User",
+                        select: "name organizationType _id"
+                    }
+                });
         }
-
-        results = await Candidate.find({ ...searchConditions, ...softFilter })
-            .select({ score: { $meta: "textScore" }, user: 1, address: 1, professionalDetails: 1, research: 1, publications: 1 })
-            .sort({ score: { $meta: "textScore" } })
-            .skip(skip)
-            .limit(limit)
-            .populate({
-                path: "user",
-                select: "name email userName organizations _id lastActive",
-                populate: {
-                    path: "organizations.organizationId",
-                    model: "User",
-                    select: "name organizationType _id"
-                }
-            });
     }
 
-    // ✅ Find candidates already saved by the organization
-    const candidateIds = results.map(c => c.user._id);
+    // ✅ Find candidates already saved by the organization (Efficient Approach)
+    const candidateIds = results.map(c => c.user._id); // Extract candidate IDs
     const savedCandidates = await shortlisted.find({
-        user: userId,
+        user: userId, // Organization ID
         candidate: { $in: candidateIds }
     }).select("candidate").lean();
 
     const savedCandidateSet = new Set(savedCandidates.map(sc => sc.candidate.toString()));
+    
 
-    // 🔢 Score Normalization
+    // 🔍 Find the maximum score in current results
     const maxScore = results.length > 0 ? Math.max(...results.map(r => r._doc?.score || 1)) : 1;
 
-    // 🧾 Format Results
+    // 📌 Format the Results with `isSaved` Field
     const formattedResults = results.map(candidate => ({
         id: candidate.user._id,
         name: candidate?.user?.name || "Hiron AI User",
-        jobtitle: candidate.professionalDetails?.[0]?.currentTitle || "Hiron AI User",
-        location: candidate.address?.[0]
+        jobtitle: candidate.professionalDetails?.length > 0
+            ? candidate.professionalDetails[0]?.currentTitle || "Hiron AI User"
+            : "Hiron AI User",
+        location: candidate.address?.length > 0
             ? `${candidate.address[0]?.city || "Unknown"}, ${candidate.address[0]?.state || "Unknown"}`
             : "Unknown, Unknown",
-        experience: candidate.professionalDetails?.[0]?.yearsOfExperience
+        experience: candidate.professionalDetails?.length > 0 && candidate.professionalDetails[0]?.yearsOfExperience
             ? `${candidate.professionalDetails[0].yearsOfExperience} years`
             : "N/A",
-        skills: candidate.professionalDetails?.[0]?.skills || [],
-        education: candidate.education?.[0]
+        skills: candidate.professionalDetails?.length > 0
+            ? candidate.professionalDetails[0].skills || []
+            : [],
+        education: candidate.education?.length > 0
             ? `${candidate.education[0].degree}, ${candidate.education[0].institution}`
             : "N/A",
         organizations: candidate?.user?.organizations?.map(org => ({
@@ -520,18 +648,10 @@ exports.SearchService = catchAsyncErrors(async (items) => {
             name: org.organizationId?.name || "N/A",
             type: org.organizationId?.organizationType || "N/A"
         })) || [],
-        lastActive: candidate.user?.lastActive
-            ? getLastActiveStatus(candidate.user.lastActive)
-            : getLastActiveStatus(new Date()),
-        match: candidate._doc?.score
-            ? Math.round((candidate._doc.score / maxScore) * 100)
-            : 0,
-        isSaved: savedCandidateSet.has(candidate.user._id.toString())
+        lastActive: candidate.user?.lastActive ? getLastActiveStatus(candidate.user.lastActive) : getLastActiveStatus(new Date()),
+        match: candidate._doc?.score ? Math.round((candidate._doc.score / maxScore) * 100) : 0,
+        isSaved: savedCandidateSet.has(candidate.user._id.toString()) // ✅ Efficient check if candidate is saved
     }));
 
     return formattedResults;
 });
-
-
-
-// ============================== SEARCH CANDIDATES SERVICE END =============================

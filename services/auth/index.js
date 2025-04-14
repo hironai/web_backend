@@ -19,17 +19,8 @@ const subscription = require('../../models/subscription');
 // ============================== CREATE USER SERVICE START ============================
 
 exports.createUser = catchAsyncErrors(async (req, res, next) => {
-    // Manage organization ID
-    // let organizationId = new mongoose.Types.ObjectId();
-
     // Generate a unique referral code
-    let referId = await generateUniqueReferId();
-    // let organization = {
-    //     organizationId,
-    //     invitedOn: Date.now(),
-    //     acceptedOn: Date.now(),
-    //     isAccepted: true
-    // }
+    let referId = await generateUniqueReferId(req.body.name);
 
     let userName = await generateUniqueUserName(req.body.name);
 
@@ -125,11 +116,11 @@ exports.validateuser = catchAsyncErrors(async (req, res, next) => {
 // ============================== VERIFY OTP SERVICE START ============================
 
 exports.verifyOTP = catchAsyncErrors(async (req, res, next) => {
-    const { email, otp } = req.body;
+    const { email, otp } = req.body;    
 
     // Check if otp exists and validate
     const userOTP = await OTP.findOne({ email });
-
+    
     if (!userOTP) {
         throwError(req.t("auth.otp.error.otp_expired"), STATUS.BAD_REQUEST);
     } else if (userOTP.otp !== otp) {
@@ -149,7 +140,7 @@ exports.verifyOTP = catchAsyncErrors(async (req, res, next) => {
         await tokenGenerater(user._id, user.role, res, true);
 
         if (!user.isWelcomeSent) {
-            if (user.role === 'Candidate') {
+            if (user.role === 'Candidate' || user.role === "Admin") {
 
                 // create candidate profile
                 await Candidate.findOneAndUpdate(
@@ -216,7 +207,8 @@ exports.verifyOTP = catchAsyncErrors(async (req, res, next) => {
                 {
                     $set: {
                         "organizations.$[elem].isAccepted": true,  // Update `isAccepted` for each object
-                        "organizations.$[elem].acceptedOn": new Date() // Update `acceptedOn` for each object
+                        "organizations.$[elem].acceptedOn": new Date(),
+                        isWelcomeSent: true // Update `acceptedOn` for each object
                     }
                 },
                 {
@@ -268,14 +260,25 @@ exports.setAccountPassword = async (req, res, next) => {
     let hashPassword = await bcrypt.hash(password, salt);
 
     try {
-        const user = await User.findOneAndUpdate(
+        let user = await User.findOneAndUpdate(
             { email }, // Search criteria
             { $set: { password: hashPassword, isPasswordSet: true } }, // Update operation
             { new: true } // Return the updated document
-        ).select('+isPasswordSet');
+        ).select('+isPasswordSet +referId +name');
 
         if (!user) {
             throwError(req.t("auth.error.invalid_user"), STATUS.UNAUTHORIZED);
+        }
+
+        if (!user.referId) {
+            const newReferId = await generateUniqueReferId(user.name);
+        
+            // Atomically update only if referId is still missing (to avoid race conditions)
+            user = await User.findOneAndUpdate(
+                { _id: user._id, referId: { $exists: false } },
+                { $set: { referId: newReferId } },
+                { new: true }
+            );
         }
 
         // ✅ Save activity in database
@@ -311,7 +314,7 @@ exports.resetAccountPassword = catchAsyncErrors(async (req, res, next) => {
 
     // 🔍 Step 1: Fetch user with password
     const user = await User.findById(userId).select("+password"); // ✅ Ensure password is fetched
-
+ 
     if (!user) {
         throwError(req.t("auth.error.invalid_user"), STATUS.UNAUTHORIZED);
     }
@@ -322,7 +325,6 @@ exports.resetAccountPassword = catchAsyncErrors(async (req, res, next) => {
     if (!isMatch) {
         throwError(req.t("profile.user.validation.password_mismatch"), STATUS.BAD_REQUEST);
     }
-
 
     // 🔒 Step 3: Hash New Password
     const salt = await bcrypt.genSalt(10);

@@ -50,11 +50,6 @@ const validateRequest = (req, res, next) => {
             (requestHost?.includes("internal.hironai.com") ||
              requestReferer?.includes("internal.hironai.com")));
 
-    // console.log("Allowed Origins:", allowedOrigins);
-    // console.log("Request Origin:", requestOrigin);
-    // console.log("Request Host:", requestHost);
-    // console.log("Request Referer:", requestReferer);
-
     if (isAllowed) {
         // Set CORS headers conditionally only if origin exists
         if (requestOrigin) {
