@@ -9,9 +9,6 @@ const throwError = require("../../utils/error/error");
 const resetSetPassword = catchAsyncErrors(async (req, res, next) => {
     let { currentPassword, newPassword } = req.body;
 
-    console.log(currentPassword, currentPassword.length, newPassword, newPassword.length);
-    
-
     // Check if the Authorization header is present
     if (!currentPassword || !newPassword || currentPassword.length < 6 || newPassword.length < 6) {
         throwError(i18nextInstance.t("profile.user.validation.password_min_length"), STATUS.BAD_REQUEST);

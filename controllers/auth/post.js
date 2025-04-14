@@ -12,7 +12,7 @@ const { signinSchema, emailSchema, otpvrifySchema, userSignupSchema, organizatio
 
 const signUp = catchAsyncErrors(async (req, res, next) => {
     // Validate input with Zod    
-    let validatedData = req.body.role && req.body.role === "Candidate" ? userSignupSchema.parse(req.body)
+    let validatedData = req.body.role && (req.body.role === "Candidate" || req.body.role === "Admin") ? userSignupSchema.parse(req.body)
         : req.body.role && req.body.role === "Organization" ? organizationSignupSchema.parse(req.body)
             : throwError(i18nextInstance.t("auth.validation.role_invalid"), STATUS.BAD_REQUEST);
 

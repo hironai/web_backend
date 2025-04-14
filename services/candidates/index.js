@@ -83,6 +83,11 @@ exports.getCandidateDashboardData = async (userId) => {
                 });
             }
 
+                const profileSections = await this.getCandidateStats(dashboard);
+                const completedSections = profileSections.filter(section => section.completed).length;
+            
+                dashboard['isPorfileCompleted'] = completedSections === profileSections.length;
+
             return dashboard;
 }
 

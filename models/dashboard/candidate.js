@@ -11,8 +11,8 @@ const notificationSchema = new mongoose.Schema({
 
 
 const candidateSchema = new mongoose.Schema({
-    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-    isSearchEnable: { type: Boolean, default: true  },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true, index: true },
+    isSearchEnable: { type: Boolean, default: true, index: true  },
     name: { type: String, default: "" },
     email: { type: String, default: ""},
 
@@ -203,9 +203,6 @@ candidateSchema.index({
     "education.degree": "text",
     "education.institution": "text",
     "education.description": "text",
-    "education.fieldOfStudy": "text",
-    "education.publications": "text",
-    "education.thesis": "text",
     "experience.title": "text",
     "experience.company": "text",
     "experience.description": "text",
@@ -223,8 +220,8 @@ candidateSchema.index({
     "certifications.name": "text",
     "certifications.description": "text",
     "certifications.issuingOrganization": "text",
-    "name": "text",
-    "email": "text"
+    // "name": "text",
+    // "email": "text"
 }, {
     name: "CandidateSearchIndex",
     default_language: "english"
@@ -232,24 +229,83 @@ candidateSchema.index({
 
 
 // 🔍 Compound Index for Faster Filtering
+candidateSchema.index({ isSearchEnable: 1, "address.state": 1 });
+candidateSchema.index({ "professionalDetails.yearsOfExperience": 1 }, { sparse: true });
 
 // Indexes for filter/search optimization
-candidateSchema.index({ user: 1 });
-candidateSchema.index({ isSearchEnable: 1 });
-candidateSchema.index({ "professionalDetails.yearsOfExperience": 1 }); // OK without sparse unless most docs don’t have it
-candidateSchema.index({ "address.city": 1 });
-candidateSchema.index({ "address.state": 1 });
-candidateSchema.index({ "address.country": 1 });
+// candidateSchema.index({ "professionalDetails.yearsOfExperience": 1 });
+// candidateSchema.index({ "address.city": 1 });
+// candidateSchema.index({ "address.state": 1 });
+// candidateSchema.index({ "address.country": 1 });
 
-// These are multikey indexes (on array subfields) - VALID ✅
-candidateSchema.index({ "research.title": 1 });
-candidateSchema.index({ "research.institution": 1 });
-candidateSchema.index({ "publications.title": 1 });
-candidateSchema.index({ "publications.journal": 1 });
+// // These are multikey indexes (on array subfields) - VALID ✅
+// candidateSchema.index({ "research.title": 1 });
+// candidateSchema.index({ "research.institution": 1 });
+// candidateSchema.index({ "publications.title": 1 });
+// candidateSchema.index({ "publications.journal": 1 });
 
-// Compound filters for common search use cases
-candidateSchema.index({ isSearchEnable: 1, "address.state": 1 });
-candidateSchema.index({ isSearchEnable: 1, "professionalDetails.yearsOfExperience": 1 });
+// // Compound filters for common search use cases
+// candidateSchema.index({ isSearchEnable: 1, "address.state": 1 });
+// candidateSchema.index({ isSearchEnable: 1, "professionalDetails.yearsOfExperience": 1 });
+
+
+// // 🔍 Full-Text Search Indexes
+// candidateSchema.index({
+//     "personalDetails.bio": "text",
+//     "professionalDetails.currentTitle": "text",
+//     "professionalDetails.skills": "text",
+//     "professionalDetails.currentCompany": "text",
+//     "professionalDetails.summary": "text",
+//     "education.degree": "text",
+//     "education.institution": "text",
+//     "education.description": "text",
+//     "education.fieldOfStudy": "text",
+//     "education.publications": "text",
+//     "education.thesis": "text",
+//     "experience.title": "text",
+//     "experience.company": "text",
+//     "experience.description": "text",
+//     "experience.achievements": "text",
+//     "address.city": "text",
+//     "address.state": "text",
+//     "address.country": "text",
+//     "address.addressLine1": "text",
+//     "address.addressLine2": "text",
+//     "achievements.title": "text",
+//     "achievements.description": "text",
+//     "projects.name": "text",
+//     "projects.description": "text",
+//     "projects.technologies": "text",
+//     "certifications.name": "text",
+//     "certifications.description": "text",
+//     "certifications.issuingOrganization": "text",
+//     "name": "text",
+//     "email": "text"
+// }, {
+//     name: "CandidateSearchIndex",
+//     default_language: "english"
+// });
+
+
+// // 🔍 Compound Index for Faster Filtering
+
+// // Indexes for filter/search optimization
+// candidateSchema.index({ user: 1 });
+// candidateSchema.index({ isSearchEnable: 1 });
+// candidateSchema.index({ "professionalDetails.yearsOfExperience": 1 }); // OK without sparse unless most docs don’t have it
+// candidateSchema.index({ "address.city": 1 });
+// candidateSchema.index({ "address.state": 1 });
+// candidateSchema.index({ "address.country": 1 });
+
+// // These are multikey indexes (on array subfields) - VALID ✅
+// candidateSchema.index({ "research.title": 1 });
+// candidateSchema.index({ "research.institution": 1 });
+// candidateSchema.index({ "publications.title": 1 });
+// candidateSchema.index({ "publications.journal": 1 });
+
+// // Compound filters for common search use cases
+// candidateSchema.index({ isSearchEnable: 1, "address.state": 1 });
+// candidateSchema.index({ isSearchEnable: 1, "professionalDetails.yearsOfExperience": 1 });
 
 const Candidate = mongoose.model("Candidate", candidateSchema);
 module.exports = Candidate;

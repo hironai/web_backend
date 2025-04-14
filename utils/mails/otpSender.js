@@ -19,7 +19,7 @@ exports.otpSender = catchAsyncErrors(async (email, username, next) => {
         email,
         otp,
         emailTitle: 'Account Verification Code From Hiron AI',
-        emailBody: OTPEmail(otp),
+        emailBody: OTPEmail(username, otp),
     }];
 
     // Add the OTP email job to the queue

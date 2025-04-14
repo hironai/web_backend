@@ -5,6 +5,8 @@ const { i18nextInstance } = require("../../middlewares/i18n");
 const activity = require("../../models/activity");
 const DeletedUser = require("../../models/auth/deletedUser");
 const User = require("../../models/auth/user");
+const { addEmailsToQueue } = require("../../services/email/emailQueueService");
+const { DeleteAccountEmail } = require("../../templates/emails/DeleteAccount");
 const throwError = require("../../utils/error/error");
 
 // =============================== Delete Account API Start ===========================
@@ -108,6 +110,17 @@ const deleteAccount = catchAsyncErrors(async (req, res) => {
             await activity.bulkWrite(bulkActivities); // ✅ Use `bulkWrite()` for efficient inserts
         }
     }
+
+    // send email
+    // send welcome emai
+    const emails = [{
+        username: deletedAccount.name,
+        email: deletedAccount.email,
+        emailTitle: 'Account Deleted - Hiron AI',
+        emailBody: DeleteAccountEmail(deletedAccount.name, deletedAccount.email),
+    }];
+
+    await addEmailsToQueue(emails, "sendInvitation");
 
     // ✅ Step 6: Return Success Response
     return res.status(STATUS.SUCCESS).json({

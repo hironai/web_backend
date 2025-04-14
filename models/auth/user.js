@@ -50,7 +50,8 @@ const userSchema = new mongoose.Schema(
         isPasswordSet: { type: Boolean, default: true, select: false },
         isWelcomeSent: { type: Boolean, default: false },
         lastActive: { type: Date, default: new Date() },
-        referBY: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+        referBy: { type: String, ref: 'User' }
+        // referBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
     },
     { timestamps: true }
 );

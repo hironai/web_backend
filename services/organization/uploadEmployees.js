@@ -9,6 +9,8 @@ const STATUS = require("../../constants/STATUS");
 const generateUniqueUserName = require("../../utils/math/generateUniqueName");
 const Organization = require("../../models/dashboard/organization");
 const catchAsyncErrors = require("../../middlewares/catchAsyncErrors");
+const { getActivity } = require("./checkProfileCompletion");
+const { InvitationEmail } = require("../../templates/emails/Invitation");
 
 const CHUNK_SIZE = 10000; // Process 10,000 users at a time
 
@@ -119,11 +121,17 @@ exports.uploadEmployees = async (organizationId, employees) => {
                 });
                 
                 // Prepare email notification
+                // emailsToSend.push({
+                //     name: emp.name,
+                //     email: emp.email,
+                //     emailTitle: `${OrganisationInfo.name} invitation to join Hiron AI, ${emp.name}!`,
+                //     emailBody: `Hey ${emp.name} 👋,\n\n${OrganisationInfo.name} invited you to join Hiron AI.\n\nYour temporary password: ${plainPassword}\n\nPlease reset your password upon login.`
+                // });
                 emailsToSend.push({
                     name: emp.name,
                     email: emp.email,
-                    emailTitle: `${OrganisationInfo.name} invitation to join Hiron AI, ${emp.name}!`,
-                    emailBody: `Hey ${emp.name} 👋,\n\n${OrganisationInfo.name} invited you to join Hiron AI.\n\nYour temporary password: ${plainPassword}\n\nPlease reset your password upon login.`
+                    emailTitle: `${OrganisationInfo.name} Invited you to Join on Hiron AI!`,
+                    emailBody: InvitationEmail(OrganisationInfo.name, emp.name, OrganisationInfo.contactPerson, emp.email, plainPassword)
                 });
             }
 
@@ -136,10 +144,13 @@ exports.uploadEmployees = async (organizationId, employees) => {
             await addEmailsToQueue(emailsToSend, "sendInvitation");
         }
 
+        let activityData = await getActivity(organizationId);
+
         return {
             existingUsersUpdated: totalExistingUsersUpdated,
             newUsersInserted: totalNewUsersInserted,
-            totalProcessed: totalExistingUsersUpdated + totalNewUsersInserted
+            totalProcessed: totalExistingUsersUpdated + totalNewUsersInserted,
+            userActivity: activityData
         };
     } catch (error) {
         console.error("Error onboarding employees:", error);

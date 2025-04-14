@@ -1,50 +1,158 @@
-exports.OTPEmail = (otp) => {
-    return `<!DOCTYPE html
-    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html dir="ltr" lang="en">
-
+exports.OTPEmail = (name, otp) => {
+    let year = new Date().getFullYear();
+    return `<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Your Email - Hiron AI</title>
+    <!--[if mso]>
+    <noscript>
+        <xml>
+            <o:OfficeDocumentSettings>
+                <o:PixelsPerInch>96</o:PixelsPerInch>
+            </o:OfficeDocumentSettings>
+        </xml>
+    </noscript>
+    <![endif]-->
+    <style>
+        /* Reset styles */
+        body, table, td, div, p {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.5;
+        }
+        /* Responsive container */
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        /* OTP code styles */
+        .otp-code {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: #074b34;
+            background-color: #f8f9fa;
+            padding: 16px 32px;
+            border-radius: 6px;
+            margin: 24px 0;
+            text-align: center;
+        }
+        /* Responsive images */
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        /* Dark mode support */
+        /* @media (prefers-color-scheme: dark) {
+            .dark-mode {
+                background-color: #1a1a1a !important;
+                color: #ffffff !important;
+            }
+            .dark-mode-text {
+                color: #ffffff !important;
+            }
+            .dark-mode-border {
+                border-color: #333333 !important;
+            }
+            .otp-code {
+                background-color: #333333 !important;
+                color: #ffffff !important;
+            }
+        } */
+        /* Mobile responsiveness */
+        @media screen and (max-width: 600px) {
+            .container {
+                width: 100% !important;
+            }
+            .mobile-padding {
+                padding: 20px !important;
+            }
+            .otp-code {
+                font-size: 28px;
+                padding: 12px 24px;
+            }
+        }
+    </style>
 </head>
-<div style="display:none;overflow:hidden;line-height:1px;opacity:0;max-height:0;max-width:0">Your verification code for
-    Nectar
-    <div>
-    </div>
-</div>
+<body style="margin: 0; padding: 0; background-color: #f6f6f6;" class="dark-mode">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
+        <tr>
+            <td align="center" style="padding: 40px 0;">
+                <table class="container" border="0" cellspacing="0" cellpadding="0" role="presentation">
+                    <tr>
+                        <td class="mobile-padding dark-mode" style="background-color: #ffffff; padding: 40px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                            <!-- Logo -->
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
+                                <tr>
+                                    <td align="center" style="padding-bottom: 12px;">
+                                        <img src="https://hironai.com/icon.png" alt="Hiron AI" style="width: 50px; height: auto;">
+                                    </td>
+                                </tr>
+                            </table>
 
-<body
-    style="background-color:#ffffff;font-family:-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Oxygen-Sans,Ubuntu,Cantarell,&quot;Helvetica Neue&quot;,sans-serif">
-    <table align="center" width="100%" border="0" cellPadding="0" cellSpacing="0" role="presentation"
-        style="max-width:560px;margin:0 auto;padding:20px 0 48px">
-        <tbody>
-            <tr style="width:100%">
-                <td><img alt="Nectar" height="50" src="https://workforwin.com/icon.svg"
-                        style="display:block;text-decoration:none; border:2px gainsboro dashed; border-radius: 100%; padding: 4px;"
-                        width="52" />
-                    <h1
-                        style="font-size:24px;letter-spacing:-0.5px;line-height:1.3;font-weight:400;color:#484848;padding:17px 0 0">
-                        Your verification code</h1>
-                    <table align="center" width="100%" border="0" cellPadding="0" cellSpacing="0" role="presentation"
-                        style="padding:20px 0 27px; margin-bottom:12px">
-                        <tbody>
-                            <tr>
-                                <td><code
-                                        style="font-family:monospace;font-weight:700;padding:1px 4px;background-color:#dfe1e4;letter-spacing:-0.3px;font-size:21px;border-radius:4px;color:#3c4149">${otp}</code>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <p style="font-size:15px;line-height:1.4;margin:0 0 15px;color:#3c4149">This verification code will
-                        only be valid for the next 5 minutes. If this expires you can request a new OTP at any time</p>
-                    <p style="font-size:16px;line-height:26px;margin:16px 0">Best,<br />Nectar Auth</p>
-                    <hr
-                        style="width:100%;border:none;border-top:1px solid #eaeaea;border-color:#cccccc;margin:20px 0" />
-                    <p style="font-size:12px;line-height:24px;margin:16px 0;color:#8898aa">123 Broadway, New York, NY 10013, USA<br />+1 (555) 123-4567</p>
-                </td>
-            </tr>
-        </tbody>
+                            <!-- Title -->
+                            <h1 style="color: #333333; font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 24px;" class="dark-mode-text">
+                                Verify Your Email
+                            </h1>
+
+                            <!-- Main Content -->
+                           <!-- <p style="color: #666666; font-size: 16px; margin-bottom: 24px; text-align: center;" class="dark-mode-text">
+                                Hi ${name},
+                            </p> -->
+
+
+                            <p style="color: #666666; font-size: 16px; margin-bottom: 24px; text-align: center;" class="dark-mode-text">
+                                Please use the verification code below to complete your email verification:
+                            </p>
+
+                            <!-- OTP Code -->
+                            <div class="otp-code">
+                                ${otp}
+                            </div>
+
+                            <!-- Security Notice -->
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation" style="margin: 32px 0;">
+                                <tr>
+                                    <td style="background-color: #f8f9fa; padding: 24px; border-radius: 6px;" class="dark-mode">
+                                        <p style="color: #666666; font-size: 14px; margin: 0;" class="dark-mode-text">
+                                            🔒 This code will expire in 5 minutes and can only be used once. If you didn't request this code, please ignore this email.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Help Text -->
+                            <p style="color: #666666; font-size: 16px; text-align: center;" class="dark-mode-text">
+                                Having trouble? <a href="https://hironai.com/help-center" style="color: #074b34; text-decoration: none;">Contact Support</a>
+                            </p>
+
+                            <!-- Footer -->
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation" style="margin-top: 40px; border-top: 1px solid #eaeaea;" class="dark-mode-border">
+                                <tr>
+                                    <td style="padding-top: 24px;">
+                                        <p style="color: #999999; font-size: 14px; text-align: center;" class="dark-mode-text">
+                                            © ${year} Hiron AI. All rights reserved.
+                                        </p>
+                                        <p style="color: #999999; font-size: 14px; text-align: center;" class="dark-mode-text">
+                                            Buckingham Palace Road, London SW1W 9SR, UK
+                                        </p>
+                                        <p style="color: #999999; font-size: 14px; text-align: center; margin-top: 16px;" class="dark-mode-text">
+                                            <a href="https://hironai.com/privacy" style="color: #999999; text-decoration: underline; margin: 0 8px;">Privacy Policy</a>
+                                            <a href="https://hironai.com/terms" style="color: #999999; text-decoration: underline; margin: 0 8px;">Terms of Service</a>
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
     </table>
 </body>
-
 </html>`;
 };

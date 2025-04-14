@@ -1,11 +1,11 @@
-exports.WelcomeUser = (name) => {
+exports.DeleteAccountEmail = (name, email) => {
     let year = new Date().getFullYear();
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Hiron AI</title>
+    <title>Account Deleted - Hiron AI</title>
     <!--[if mso]>
     <noscript>
         <xml>
@@ -41,6 +41,21 @@ exports.WelcomeUser = (name) => {
             text-align: center;
             margin: 24px 0;
         }
+        /* Notice box */
+        .notice-box {
+            background-color: #fff4f4;
+            padding: 24px;
+            border-radius: 6px;
+            margin: 24px 0;
+            border-left: 4px solid #dc2626;
+        }
+        /* Data retention box */
+        .data-box {
+            background-color: #f8f9fa;
+            padding: 24px;
+            border-radius: 6px;
+            margin: 24px 0;
+        }
         /* Responsive images */
         img {
             max-width: 100%;
@@ -58,6 +73,12 @@ exports.WelcomeUser = (name) => {
             .dark-mode-border {
                 border-color: #333333 !important;
             }
+            .notice-box {
+                background-color: #2d1f1f !important;
+            }
+            .data-box {
+                background-color: #333333 !important;
+            }
         } */
         /* Mobile responsiveness */
         @media screen and (max-width: 600px) {
@@ -66,6 +87,10 @@ exports.WelcomeUser = (name) => {
             }
             .mobile-padding {
                 padding: 20px !important;
+            }
+            .button {
+                width: 100%;
+                box-sizing: border-box;
             }
         }
     </style>
@@ -86,50 +111,42 @@ exports.WelcomeUser = (name) => {
                                 </tr>
                             </table>
 
-                            <!-- Welcome Message -->
+                            <!-- Title -->
                             <h1 style="color: #333333; font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 24px;" class="dark-mode-text">
-                                Welcome to Hiron AI!
+                                Your Account Has Been Deleted
                             </h1>
 
                             <!-- Main Content -->
-                            <p style="color: #666666; font-size: 16px; margin-bottom: 24px;" class="dark-mode-text">
+                            <p style="color: #666666; font-size: 16px; margin-bottom: 24px; text-align: center;" class="dark-mode-text">
                                 Hi ${name},
                             </p>
 
-                            <p style="color: #666666; font-size: 16px; margin-bottom: 24px;" class="dark-mode-text">
-                                We're thrilled to have you join our community! Your account has been successfully created, and you're now ready to explore all the amazing features our platform has to offer.
+                            <p style="color: #666666; font-size: 16px; margin-bottom: 24px; text-align: center;" class="dark-mode-text">
+                                We're confirming that your Hiron AI account (${email}) has been successfully deleted as requested.
                             </p>
 
-                            <!-- Getting Started Section -->
-                            <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation" style="margin: 32px 0;">
-                                <tr>
-                                    <td style="background-color: #f8f9fa; padding: 24px; border-radius: 6px;" class="dark-mode">
-                                        <h2 style="color: #333333; font-size: 18px; margin-bottom: 16px;" class="dark-mode-text">
-                                            🚀 Get Started in 3 Easy Steps
-                                        </h2>
-                                        <ol style="color: #666666; margin-left: 24px; padding: 0;" class="dark-mode-text">
-                                            <li style="margin-bottom: 12px;">Complete your profile</li>
-                                            <li style="margin-bottom: 12px;">Explore available opportunities</li>
-                                            <li style="margin-bottom: 12px;">Connect with potential matches</li>
-                                        </ol>
-                                    </td>
-                                </tr>
-                            </table>
+                            <!-- Notice Box -->
+                            <div class="notice-box">
+                                <p style="color: #666666; font-size: 14px; margin: 0;" class="dark-mode-text">
+                                    ⚠️ This action is permanent and cannot be undone. If you wish to use our services again in the future, you'll need to create a new account.
+                                </p>
+                            </div>
 
-                            <!-- CTA Button -->
-                            <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
-                                <tr>
-                                    <td align="center">
-                                        <a href="https://hironai.com/dashboard" class="button" style="font-family: inherit;">
-                                            Complete Your Profile
-                                        </a>
-                                    </td>
-                                </tr>
-                            </table>
+                            <!-- Data Retention Info -->
+                            <div class="data-box">
+                                <h2 style="color: #333333; font-size: 18px; margin-bottom: 16px;" class="dark-mode-text">
+                                    What Happens Next?
+                                </h2>
+                                <ul style="color: #666666; margin-left: 24px; padding: 0;" class="dark-mode-text">
+                                    <li style="margin-bottom: 12px;">Your account and personal information have been removed from our active systems</li>
+                                    <li style="margin-bottom: 12px;">Any remaining data will be permanently deleted from our backups within 30 days</li>
+                                    <li style="margin-bottom: 12px;">You will no longer receive any communications from us</li>
+                                </ul>
+                            </div>
 
-                            <!-- Help Section -->
-                            <p style="color: #666666; font-size: 16px; margin-top: 32px;" class="dark-mode-text">
-                                Need help getting started? Our support team is here for you 24/7. Just reply to this email or visit our <a href="https://hironai.com/help-center" style="color: #074b34; text-decoration: none;">Help Center</a>.
+                            <!-- Feedback Section -->
+                            <p style="color: #666666; font-size: 16px; text-align: center; margin-top: 32px;" class="dark-mode-text">
+                                We're sorry to see you go. If you'd like to share feedback about your experience, please <a href="https://hironai.com/feedback" style="color: #074b34; text-decoration: none;">let us know</a>.
                             </p>
 
                             <!-- Footer -->
@@ -143,7 +160,6 @@ exports.WelcomeUser = (name) => {
                                             Buckingham Palace Road, London SW1W 9SR, UK
                                         </p>
                                         <p style="color: #999999; font-size: 14px; text-align: center; margin-top: 16px;" class="dark-mode-text">
-                                            <a href="https://hironai.com/dashboard" style="color: #999999; text-decoration: underline; margin: 0 8px;">Unsubscribe</a>
                                             <a href="https://hironai.com/privacy" style="color: #999999; text-decoration: underline; margin: 0 8px;">Privacy Policy</a>
                                             <a href="https://hironai.com/terms" style="color: #999999; text-decoration: underline; margin: 0 8px;">Terms of Service</a>
                                         </p>

@@ -64,6 +64,7 @@ exports.getProfileDashboard = async (profile, req, template) => {
                 );
             });
             
+            
 
             if(matchedTemplate) {
                 if(userId === user._id.toString()){
@@ -257,6 +258,7 @@ exports.getProfileDashboard = async (profile, req, template) => {
                     duration: "2017-2018",
                     supervisor: "Dr. John Brown"
                 }
-            ]
+            ],
+            isPorfileCompleted: dashboard && dashboard?.isPorfileCompleted
     };
 }
